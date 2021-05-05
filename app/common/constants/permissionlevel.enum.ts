@@ -1,0 +1,5 @@
+export enum PermissionLevel {
+  FREE_PERMISSION = 1,
+  ADMIN_PERMISSION = 8,
+  SUDO_PERMISSION = 2147483647
+}
