@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import { ResponseCodes } from '../../common/constants/responsecodes.enum';
 import { Jwt } from '../../common/types/jwt';
 import usersService from '../../users/services/users.service';
 
@@ -12,7 +13,9 @@ class JwtMiddleware {
     if (req.body && req.body.refreshToken) {
       return next();
     } else {
-      return res.status(400).send({ errors: ['Missing required field: refreshToken'] });
+      return res
+        .status(ResponseCodes.BAD_REQUEST)
+        .send({ errors: ['Missing required field: refreshToken'] });
     }
   }
 
@@ -36,7 +39,7 @@ class JwtMiddleware {
       };
       return next();
     } else {
-      return res.status(400).send({ errors: ['Invalid refresh token'] });
+      return res.status(ResponseCodes.BAD_REQUEST).send({ errors: ['Invalid refresh token'] });
     }
   }
 
@@ -45,16 +48,16 @@ class JwtMiddleware {
       try {
         const authorization = req.headers['authorization'].split(' ');
         if (authorization[0] !== 'Bearer') {
-          return res.status(401).send();
+          return res.status(ResponseCodes.UNAUTHORIZED).send();
         } else {
           res.locals.jwt = jwt.verify(authorization[1], jwtSecret) as Jwt;
           next();
         }
       } catch (err) {
-        return res.status(403).send();
+        return res.status(ResponseCodes.FORBIDDEN).send({ errors: ['Access Forbidden'] });
       }
     } else {
-      return res.status(401).send();
+      return res.status(ResponseCodes.UNAUTHORIZED).send({ errors: ['User not authorized'] });
     }
   }
 }

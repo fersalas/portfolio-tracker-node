@@ -13,20 +13,6 @@ class UsersMiddleware {
     return UsersMiddleware.instance;
   }
 
-  async validateRequiredUserBodyFields(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) {
-    if (req.body && req.body.email && req.body.password) {
-      next();
-    } else {
-      res
-        .status(ResponseCodes.BAD_REQUEST)
-        .send({ error: `Missing required fields: email and/or password` });
-    }
-  }
-
   async validateUniqueEmail(
     req: express.Request,
     res: express.Response,

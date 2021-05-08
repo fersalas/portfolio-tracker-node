@@ -15,6 +15,7 @@ import helmet from 'helmet';
 import { CommonRoutesConfig } from './common/common.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
 import { AuthRoutes } from './auth/auth.routes.config';
+import { OrdersRoutes } from './orders/orders.routes.config';
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
@@ -54,8 +55,7 @@ if (!process.env.DEBUG) {
 app.use(expressWinston.logger(loggerOpts));
 
 // Routes
-routes.push(new AuthRoutes(app));
-routes.push(new UsersRoutes(app));
+routes.push(new AuthRoutes(app), new UsersRoutes(app), new OrdersRoutes(app));
 
 app.get('/', (req: express.Request, res: express.Response) =>
   res.status(200).send('Portfolio Tracker Node Server')

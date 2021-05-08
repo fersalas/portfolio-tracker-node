@@ -6,5 +6,5 @@ export interface PutUserDto {
   firstName: string;
   lastName: string;
   permissionLevel: number;
-  modification_notes: ModificationNote[];
+  modificationNotes: ModificationNote[];
 }

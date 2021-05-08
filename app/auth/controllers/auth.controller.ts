@@ -2,6 +2,7 @@ import express from 'express';
 import debug from 'debug';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import { ResponseCodes } from '../../common/constants/responsecodes.enum';
 
 const log: debug.IDebugger = debug('app:auth-controller');
 
@@ -19,10 +20,10 @@ class AuthController {
       const token = jwt.sign(req.body, jwtSecret, {
         expiresIn: tokenExpirationInSeconds
       });
-      return res.status(201).send({ accessToken: token, refreshToken: hash });
+      return res.status(ResponseCodes.CREATED).send({ accessToken: token, refreshToken: hash });
     } catch (err) {
       log('createJWT error: %O', err);
-      return res.status(500).send();
+      return res.status(ResponseCodes.INTERNAL_SERVER_ERROR).send();
     }
   }
 }

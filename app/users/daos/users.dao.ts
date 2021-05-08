@@ -21,7 +21,7 @@ class UsersDao {
     firstName: String,
     lastName: String,
     permissionLevel: Number,
-    modification_notes: [ModificationNote]
+    modificationNotes: { type: [ModificationNote], select: false }
   });
 
   User = mongooseService.getMongoose().model('Users', this.userSchema);
@@ -37,17 +37,17 @@ class UsersDao {
     return this.instance;
   }
 
-  private createModificationNote(modification_note: string): ModificationNote {
+  private createModificationNote(modificationNote: string): ModificationNote {
     return {
-      modified_by: null,
-      modified_on: new Date(Date.now()),
-      modification_note
+      modifiedBy: null,
+      modifiedOn: new Date(Date.now()),
+      modificationNote
     };
   }
 
   async addUser(userFields: CreateUserDto) {
     const userId = shortUUID.generate();
-    userFields.modification_notes = [
+    userFields.modificationNotes = [
       UsersDao.getInstance().createModificationNote('New User Created')
     ];
     const user = new this.User({
@@ -81,7 +81,7 @@ class UsersDao {
   }
 
   async updateUserById(userId: string, userFields: PatchUserDto | PutUserDto) {
-    userFields.modification_notes = [UsersDao.getInstance().createModificationNote('User Updated')];
+    userFields.modificationNotes = [UsersDao.getInstance().createModificationNote('User Updated')];
     const existingUser = await this.User.findOneAndUpdate(
       { _id: userId },
       { $set: userFields },

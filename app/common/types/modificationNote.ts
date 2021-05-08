@@ -1,11 +1,11 @@
 export type ModificationNote = {
-  modified_on: Date;
-  modified_by: string | null;
-  modification_note?: string;
+  modifiedOn: Date;
+  modifiedBy: string | null;
+  modificationNote?: string;
 };
 
 export const ModificationNote = {
-  modified_on: Date,
-  modified_by: String,
-  modification_note: String
+  modifiedOn: Date,
+  modifiedBy: String,
+  modificationNote: String
 };

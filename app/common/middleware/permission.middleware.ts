@@ -1,5 +1,6 @@
 import express from 'express';
 import { PermissionLevel } from '../constants/permissionlevel.enum';
+import { ResponseCodes } from '../constants/responsecodes.enum';
 import debug from 'debug';
 
 const log: debug.IDebugger = debug('app:common-permission-middleware');
@@ -12,7 +13,7 @@ class CommonPermissionMiddleware {
         if (userPermissionLevel & requiredPermissionLevel) {
           next();
         } else {
-          res.status(403).send();
+          res.status(ResponseCodes.FORBIDDEN).send({ errors: ['Access Forbidden'] });
         }
       } catch (e) {
         log(e);
@@ -32,7 +33,7 @@ class CommonPermissionMiddleware {
       if (userPermissionLevel & PermissionLevel.ADMIN_PERMISSION) {
         return next();
       } else {
-        return res.status(403).send();
+        return res.status(ResponseCodes.FORBIDDEN).send({ errors: ['Access Forbidden'] });
       }
     }
   }
@@ -46,7 +47,7 @@ class CommonPermissionMiddleware {
     if (userPermissionLevel & PermissionLevel.ADMIN_PERMISSION) {
       return next();
     } else {
-      return res.status(403).send();
+      return res.status(ResponseCodes.FORBIDDEN).send({ errors: ['Access Forbidden'] });
     }
   }
 }
